@@ -17,5 +17,21 @@
 package com.reach.deva.feature.translate
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.mlkit.nl.translate.TranslateLanguage
+import kotlinx.coroutines.launch
 
-class TranslateViewModel() : ViewModel()
+class TranslateViewModel(private val translator: MlTranslator) : ViewModel() {
+
+    fun downloadCN() {
+        viewModelScope.launch {
+            translator.downloadLanguage(TranslateLanguage.CHINESE)
+        }
+    }
+
+    fun downloadEN() {
+        viewModelScope.launch {
+            translator.downloadLanguage(TranslateLanguage.ENGLISH)
+        }
+    }
+}

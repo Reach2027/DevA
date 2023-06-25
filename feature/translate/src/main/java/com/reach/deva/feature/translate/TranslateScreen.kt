@@ -16,16 +16,38 @@
 
 package com.reach.deva.feature.translate
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TranslateRoute(viewModel: TranslateViewModel = koinViewModel()) {
-    TranslateScreen()
+    TranslateScreen(
+        { viewModel.downloadCN() },
+        { viewModel.downloadEN() },
+    )
 }
 
 @Composable
-fun TranslateScreen() {
-    Text(text = "Translate")
+fun TranslateScreen(
+    cn: () -> Unit,
+    en: () -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Button(onClick = cn) {
+            Text(text = "DownloadCN")
+        }
+
+        Button(onClick = en) {
+            Text(text = "DownloadEN")
+        }
+    }
 }

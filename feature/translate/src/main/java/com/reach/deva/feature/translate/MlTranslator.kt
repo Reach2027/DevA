@@ -16,6 +16,7 @@
 
 package com.reach.deva.feature.translate
 
+import android.util.Log
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
 
 class MlTranslator {
 
@@ -78,14 +80,20 @@ class MlTranslator {
         val model = TranslateRemoteModel.Builder(langStr).build()
         val conditions = DownloadConditions.Builder().build()
         callbackFlow {
-            modelManager.download(model, conditions).addOnCompleteListener { trySend(it) }
+            modelManager.download(model, conditions)
+                .addOnCompleteListener { trySend(it) }
             awaitClose { }
+        }.catch {
+            it.printStackTrace()
         }.collect { task ->
             if (task.isSuccessful) {
                 getDownloadedModels()
                 _translatorMessage.emit("Download $langStr successful")
+                Log.d("REACH", "downloadLanguage successful")
             } else {
                 task.exception?.let { e ->
+                    Log.d("REACH", "downloadLanguage failed")
+                    e.printStackTrace()
                     e.message?.let { _translatorMessage.emit("Download $langStr failed, $it") }
                 }
             }

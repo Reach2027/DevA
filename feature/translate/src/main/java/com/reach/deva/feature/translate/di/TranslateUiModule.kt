@@ -16,11 +16,15 @@
 
 package com.reach.deva.feature.translate.di
 
+import com.reach.deva.feature.translate.MlTranslator
 import com.reach.deva.feature.translate.TranslateViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val translateUiModule = module {
+
+    factoryOf(::MlTranslator)
 
     viewModelOf(::TranslateViewModel)
 }

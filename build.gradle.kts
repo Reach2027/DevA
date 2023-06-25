@@ -1,3 +1,5 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -9,8 +11,8 @@ plugins {
 }
 
 subprojects {
-    apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
-    extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    apply(plugin = "com.diffplug.spotless")
+    configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")
             targetExclude("**/build/**/*.kt")
@@ -30,4 +32,5 @@ subprojects {
             licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
         }
     }
+
 }
